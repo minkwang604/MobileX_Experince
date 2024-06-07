@@ -1,11 +1,10 @@
 import os
 
-
 from fastapi import APIRouter 
 
 from llm.chat import build
 from llm.store import LLMStore
-from models.acrostic_generator import InputModel, OutputModel
+from models.recipe import InputModel, OutputModel
 
 # Configure API router
 router = APIRouter(
@@ -33,6 +32,9 @@ async def call_acrostic_generator(model: InputModel) -> OutputModel:
 
     return OutputModel(
         output=chain.invoke({
-            'input_context': model.word,
+            'input_context': f'''
+                *ingredints : {model.ingredients}
+                *cuisine_type : {model.cuisine_type}
+            ''',
         }),
     )
